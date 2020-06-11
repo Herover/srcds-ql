@@ -4,8 +4,17 @@
   "description": "GraphQL API for querying srcds servers",
   "main": "index.js",
   "scripts": {
+    "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Herover",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "apollo-server": "^2.14.3",
+    "graphql": "^15.1.0",
+    "steam-condenser": "^0.1.4"
+  },
+  "devDependencies": {
+    "typescript": "^3.9.5"
+  }
 }
