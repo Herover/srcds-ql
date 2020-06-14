@@ -1,15 +1,26 @@
 <template>
   <div class="hello">
-    <input placeholder="1.2.3.4:27016 or example.com"/>
+    <input
+      v-model="host"
+      v-on:keyup.enter="submit"
+      placeholder="1.2.3.4:27016 or example.com"
+    />
+    <button v-on:click="submit">Connect</button>
   </div>
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component, Vue,
+} from 'vue-property-decorator';
 
 @Component
 export default class HostInput extends Vue {
-  @Prop() private msg!: string;
+  private host = '';
+
+  submit() {
+    this.$emit('host', this.host);
+  }
 }
 </script>
 
