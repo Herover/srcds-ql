@@ -38,7 +38,7 @@ export default class Home extends Vue {
     this.$store.commit(MUTATIONS.ADD_SERVER, newHost);
   }
 
-  get servers() {
+  get servers(): string[] {
     return this.$store.getters.servers;
   }
 }
