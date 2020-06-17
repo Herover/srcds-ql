@@ -77,6 +77,12 @@ export default class ServerInfo extends Vue {
         error(error: Error) {
           (this as any as ServerInfo).error = error;
         },
+        update(data: any) {
+          if (data.server) {
+            (this as any).error = null;
+          }
+          return data.server;
+        },
         pollInterval: 60 * 1000,
       },
     };
