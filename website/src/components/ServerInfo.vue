@@ -1,13 +1,14 @@
 <template>
-  <div class="server-row">
-    <small>{{ host }}</small>
-    <div v-if="server">
-      <h2>{{ server.serverName }}</h2>
-      <p>{{ server.numberOfPlayers }} / {{ server.maxPlayers }}</p>
+  <div class="server-row row align-items-center">
+    <div class="col-md-1 status-holder"><div :class="'status ' + status"></div></div>
+    <div class="col-md-3 server-name">{{ server.serverName }}</div>
+    <div class="col-md-4 map-name">{{ server.mapName }}</div>
+    <div class="col-md-4 player-num-holder">
+      <div class="player-num-current">{{ server.numberOfPlayers }}
+        <small class="player-num-max"> / {{ server.maxPlayers }}</small>
+      </div>
+      <div class="player-num-max"></div>
     </div>
-    <div v-else>
-    </div>
-    <div class="status-holder"><div :class="'status ' + status"></div></div>
   </div>
 </template>
 
@@ -57,6 +58,7 @@ export default class ServerInfo extends Vue {
         query: gql`query ($host: String!) {
           server(host: $host) {
             serverName
+            mapName
             numberOfPlayers
             maxPlayers
             ping
@@ -85,12 +87,18 @@ export default class ServerInfo extends Vue {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
 .server-row {
-  width: 100%;
-  border: 1px solid #a0a0a0;
+  font-size: 2em;
 }
+
+.server-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
 .status {
-  width: 3em;
-  height: 3em;
+  width: 1.5em;
+  height: 1.5em;
   border-radius: 50%;
 }
 .status-ok {

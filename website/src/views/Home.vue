@@ -4,11 +4,13 @@
     <HostInput
       v-on:host="addHost"
     />
-    <ServerInfo
-      v-for="serverInfo in servers"
-      v-bind:key="serverInfo.host"
-      v-bind:host="serverInfo.host"
-    />
+    <div class="servers">
+      <ServerInfo
+        v-for="serverInfo in servers"
+        v-bind:key="serverInfo.host"
+        v-bind:host="serverInfo.host"
+      />
+    </div>
   </div>
 </template>
 
