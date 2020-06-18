@@ -39,6 +39,7 @@ const typeDefs = gql`
     name: String!
     score: Int!
     connectTime: Int!
+    isExtended: Boolean!
     clientPort: Int
     connectionId: Int
     ipAddress: String
@@ -88,6 +89,7 @@ const resolvers = {
               connectionId: player.getConnectionId(),
               connectTime: player.getConnectTime(),
               id: player.getId(),
+              isExtended: player.isExtended(),
               ipAddress: player.getIpAddress(),
               loss: player.getLoss(),
               name: player.getName(),
