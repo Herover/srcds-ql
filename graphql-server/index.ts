@@ -4,6 +4,24 @@ import { ServerArguments } from './defs';
 
 const TIMEOUT = 1000;
 
+/**
+ * Do we require server owners intent to use this service?
+ * If true, a admin must first set a encrypted token in server tags which we can verify before we
+ * attempt to authenticate.
+ * This is for avoiding malicious login attempts (bruteforce attacks) which can get our IP blocked.
+ */
+const RCON_PROOF_REQUIRED = !!process.env.RCON_PROOF_REQUIRED || true;
+/** Prefix token value with this */
+const RCON_PROOF_PREFIX = process.env.RCON_PROOF_PREFIX || 'rc_';
+/** 
+ * Append this to rcon password. Not setting this will expose hash of rcon password to the
+ * internet and makes it easier to crack the password since it can be done offline.
+ */
+const RCON_PROOF_SECRET = process.env.RCON_PROOF_SECRET || '';
+if (!RCON_PROOF_SECRET) {
+  console.warn('WARNING: No RCON_PROOF_SECRET environment variable set');
+}
+
 const typeDefs = gql`
   # This "Book" type defines the queryable fields for every book in our data source.
   type SourceServer {
@@ -72,6 +90,16 @@ const resolvers = {
       server.setTimeout(TIMEOUT);
       await server.initialize()
       if (typeof password != "undefined" && password !== "") {
+        if (RCON_PROOF_REQUIRED) {
+          const rules = await server.getRules();
+          let tag: string | undefined;
+          if (rules['tags'] && (tag = rules['tags'].split(',').find((tag) => tag.startsWith(RCON_PROOF_PREFIX)))) {
+            const token = tag.slice(RCON_PROOF_PREFIX.length);
+            
+          } else {
+            throw new Error('No token found in tags');
+          }
+        }
         server.rconAuth(password);
       }
 
