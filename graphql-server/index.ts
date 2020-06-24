@@ -107,14 +107,17 @@ const resolvers = {
         if (RCON_PROOF_REQUIRED) {
           const rules = await server.getRules();
           let tag: string | undefined;
-          if (rules['tags'] && (tag = rules['tags'].split(',').find((tag) => tag.startsWith(RCON_PROOF_PREFIX)))) {
+          if (rules['sv_tags'] && (tag = rules['sv_tags'].split(',').find((tag) => tag.startsWith(RCON_PROOF_PREFIX)))) {
             const token = tag.slice(RCON_PROOF_PREFIX.length);
-            
+            const expected = await createToken({ host, password, secret: RCON_PROOF_SECRET });
+            if (token !== expected) {
+              throw new Error('Unable to verify token');
+            }
           } else {
             throw new Error('No token found in tags');
           }
         }
-        server.rconAuth(password);
+        await server.rconAuth(password);
       }
 
       return {
