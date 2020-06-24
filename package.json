@@ -13,7 +13,7 @@
   "dependencies": {
     "apollo-server": "^2.14.3",
     "graphql": "^15.1.0",
-    "steam-condenser": "^0.1.4"
+    "steam-condenser": "^0.1.5"
   },
   "devDependencies": {
     "@vue/cli": "^4.4.4",
