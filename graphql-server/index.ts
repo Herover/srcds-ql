@@ -1,6 +1,7 @@
 import { ApolloServer, gql } from 'apollo-server';
-import { SourceServer } from '../../steam-condenser-js';
-import { ServerArguments } from './defs';
+import { SourceServer } from 'steam-condenser';
+import { ServerArguments, CreateTokenArguments } from './defs';
+import { createToken } from './token';
 
 const TIMEOUT = 1000;
 
@@ -74,16 +75,29 @@ const typeDefs = gql`
     v: String!
   }
 
+  type Token {
+    token: String!
+  }
+
   # The "Query" type is special: it lists all of the available queries that
   # clients can execute, along with the return type for each. In this
   # case, the "books" query returns an array of zero or more Books (defined above).
   type Query {
     server(host: String!, password: String): SourceServer
+    createToken(password: String!, host: String!): Token
   }
 `;
 
 const resolvers = {
   Query: {
+    createToken: async (_: any, { password, host }: CreateTokenArguments) => {
+      const token = await createToken({
+        password,
+        host,
+        secret: RCON_PROOF_SECRET
+      });
+      return { token: RCON_PROOF_PREFIX + token };
+    },
     server: async (_: any, { host, password }: ServerArguments) => {
       console.log(host)
       const server = new SourceServer(host);
