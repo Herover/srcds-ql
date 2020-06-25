@@ -12,6 +12,20 @@
           <div class="player-num-max"></div>
         </div>
       </div>
+      <div
+        v-if="expanded"
+        class="col-12"
+      >
+        <div class="row">
+          <div
+            v-for="player in server.players"
+            v-bind:key="player.name"
+            class="col-12"
+          >
+            {{ player.name }}
+          </div>
+        </div>
+      </div>
     </div>
     <div v-else>
       Loading {{ host }}...
@@ -42,6 +56,8 @@ const CLASS_STATUS_ERROR = 'status-error';
 @Component
 export default class ServerInfo extends Vue {
   @Prop() private host!: string;
+
+  private expanded = false;
 
   private error?: Error;
 
@@ -93,6 +109,10 @@ export default class ServerInfo extends Vue {
         pollInterval: 60 * 1000,
       },
     };
+  }
+
+  toggleExpand() {
+    this.expanded = !this.expanded;
   }
 }
 </script>
