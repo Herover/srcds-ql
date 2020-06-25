@@ -1,13 +1,20 @@
 <template>
-  <div class="server-row row align-items-center">
-    <div class="col-md-1 status-holder"><div :class="'status ' + status"></div></div>
-    <div class="col-md-3 server-name">{{ server.serverName }}</div>
-    <div class="col-md-4 map-name">{{ server.mapName }}</div>
-    <div class="col-md-4 player-num-holder">
-      <div class="player-num-current">{{ server.numberOfPlayers }}
-        <small class="player-num-max"> / {{ server.maxPlayers }}</small>
+  <div v-on:click="toggleExpand">
+    <div v-if="server">
+      <div class="server-row row align-items-center">
+        <div class="col-md-1 status-holder"><div :class="'status ' + status"></div></div>
+        <div class="col-md-3 server-name">{{ server.serverName }}</div>
+        <div class="col-md-4 map-name">{{ server.mapName }}</div>
+        <div class="col-md-4 player-num-holder">
+          <div class="player-num-current">{{ server.numberOfPlayers }}
+            <small class="player-num-max"> / {{ server.maxPlayers }}</small>
+          </div>
+          <div class="player-num-max"></div>
+        </div>
       </div>
-      <div class="player-num-max"></div>
+    </div>
+    <div v-else>
+      Loading {{ host }}...
     </div>
   </div>
 </template>
