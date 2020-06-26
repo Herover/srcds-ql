@@ -103,7 +103,7 @@ const resolvers = {
       const server = new SourceServer(host);
       server.setTimeout(TIMEOUT);
       await server.initialize()
-      if (typeof password != "undefined" && password !== "") {
+      if (typeof password === "string" && password !== "") {
         if (RCON_PROOF_REQUIRED) {
           const rules = await server.getRules();
           let tag: string | undefined;
