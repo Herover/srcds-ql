@@ -1,7 +1,13 @@
 <template>
-  <div v-on:click="toggleExpand">
+  <div>
+    <div v-if="error" class="text-danger">
+      {{ error.graphQLErrors.reduce((l, n) => { l.push(n.message); return l; }, []).join(', ') }}
+      for
+      {{ host }}
+      <span v-on:click="removePassword" class="btn btn-link">Remove password</span>
+    </div>
     <div v-if="server">
-      <div class="server-row row align-items-center">
+      <div v-on:click="toggleExpand" class="server-row row align-items-center">
         <div class="col-md-1 status-holder"><div :class="'status ' + status"></div></div>
         <div class="col-md-3 server-name">{{ server.serverName }}</div>
         <div class="col-md-4 map-name">{{ server.mapName }}</div>
@@ -17,12 +23,20 @@
         class="col-12"
       >
         <div class="row">
+          <div class="col-6">
+            <label for="server-password">Password</label>
+            <input id="server-password" v-model="passwordInput"/>
+            <button v-on:click="updatePassword">Update password</button>
+          </div>
           <div
-            v-for="player in server.players"
-            v-bind:key="player.name"
-            class="col-12"
+            class="col-6"
           >
-            {{ player.name }}
+            <div
+              v-for="player in server.players"
+              v-bind:key="player.name"
+            >
+              {{ player.name }}
+            </div>
           </div>
         </div>
       </div>
@@ -42,6 +56,8 @@ import {
 } from 'vue-property-decorator';
 import 'vue-apollo';
 
+import { MUTATIONS } from '@/store/index';
+
 Component.registerHooks(['apollo']);
 
 const PING_WARNING_TRESHOLD = 150;
@@ -56,6 +72,10 @@ const CLASS_STATUS_ERROR = 'status-error';
 @Component
 export default class ServerInfo extends Vue {
   @Prop() private host!: string;
+
+  @Prop() private password: string | undefined;
+
+  private passwordInput = '';
 
   private expanded = false;
 
@@ -78,8 +98,8 @@ export default class ServerInfo extends Vue {
   get apollo() {
     return {
       server: {
-        query: gql`query ($host: String!) {
-          server(host: $host) {
+        query: gql`query ($host: String!, $password: String) {
+          server(host: $host, password: $password) {
             serverName
             mapName
             numberOfPlayers
@@ -95,6 +115,7 @@ export default class ServerInfo extends Vue {
         variables(): any {
           return {
             host: (this as any as ServerInfo).host,
+            password: (this as any as ServerInfo).password,
           };
         },
         error(error: Error) {
@@ -113,6 +134,22 @@ export default class ServerInfo extends Vue {
 
   toggleExpand() {
     this.expanded = !this.expanded;
+  }
+
+  updatePassword() {
+    this.$store.commit(
+      MUTATIONS.UPDATE_PASSWORD,
+      { password: this.passwordInput, host: this.host },
+    );
+    this.$apollo.queries.server.refresh();
+  }
+
+  removePassword() {
+    this.$store.commit(
+      MUTATIONS.UPDATE_PASSWORD,
+      { password: null, host: this.host },
+    );
+    this.$apollo.queries.server.refresh();
   }
 }
 </script>

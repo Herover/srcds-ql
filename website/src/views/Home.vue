@@ -9,6 +9,7 @@
         v-for="serverInfo in servers"
         v-bind:key="serverInfo.host"
         v-bind:host="serverInfo.host"
+        v-bind:password="serverInfo.password"
       />
     </div>
   </div>
