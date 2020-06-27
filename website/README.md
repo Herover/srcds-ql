@@ -5,6 +5,10 @@
 npm install
 ```
 
+For Visual Studio Code Vetur users, adding parent folder to the workspace will mark `@/...` imports
+as errors. In order to fix this import this folder seperately to workspace and make sure it's the
+first project in the .workspace file.
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve
