@@ -23,7 +23,7 @@ import {
 import HostInput from '@/components/HostInput.vue';
 import ServerInfo from '@/components/ServerInfo.vue';
 
-import { MUTATIONS } from '@/store/index';
+import { MUTATIONS, IServer } from '@/store/index';
 
 @Component({
   name: 'Home',
@@ -34,14 +34,14 @@ import { MUTATIONS } from '@/store/index';
 })
 export default class Home extends Vue {
   mounted() {
-    console.log(this.servers.map((server: any) => server.host));
+    console.log(this.servers.map((server) => server.host));
   }
 
   addHost(newHost: string) {
     this.$store.commit(MUTATIONS.ADD_SERVER, newHost);
   }
 
-  get servers(): string[] {
+  get servers(): IServer[] {
     return this.$store.getters.servers;
   }
 }

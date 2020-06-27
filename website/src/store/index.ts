@@ -9,6 +9,12 @@ export enum MUTATIONS {
   UPDATE_PASSWORD = 'UPDATE_PASSWORD',
 }
 
+export interface IServer {
+  host: string
+  password: string | null
+  data: { [key: string]: string | number | boolean } | null
+}
+
 export default new Vuex.Store({
   state: {
     servers: [
@@ -17,7 +23,7 @@ export default new Vuex.Store({
         password: null,
         data: null,
       },
-    ],
+    ] as IServer[],
   },
   getters: {
     servers: (state) => state.servers,
