@@ -11,7 +11,7 @@
   "author": "Herover",
   "license": "MIT",
   "dependencies": {
-    "apollo-server": "^2.14.3",
+    "apollo-server": "^2.25.4",
     "graphql": "^15.1.0",
     "steam-condenser": "^0.1.5"
   },
